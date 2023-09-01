@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数値ゲーム</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        #number {
+            font-size: 36px;
+            margin-top: 20px;
+        }
+        #status {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        #distance {
+            display: none;
+            font-size: 24px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p>現在の数字：</p>
+        <p id="number">1</p>
+    </div>
+    <button onclick="clickNumber()" id="clickButton">クリック</button>
+    <button onclick="clearGame()" id="clearButton">終了</button>
+    <div id="status"></div>
+    <div id="distance"></div>
+
+    <script>
+        let currentNumber = 1;
+        let gameOver = false;
+
+        function clickNumber() {
+            if (!gameOver) {
+                const random = Math.random();
+                if (random < 0.05) {
+                    gameOver = true;
+                    currentNumber = 0; // ゲームオーバー時に0に設定
+                    document.getElementById('status').textContent = 'ゲームオーバー';
+                    document.getElementById('clearButton').style.display = 'none';
+                    document.getElementById('clickButton').style.display = 'none';
+                } else {
+                    currentNumber *= 2;
+                    document.getElementById('number').textContent = currentNumber;
+                }
+            }
+        }
+
+        function clearGame() {
+            if (!gameOver) {
+                document.getElementById('status').textContent = '成功！';
+                document.getElementById('clearButton').style.display = 'none';
+                document.getElementById('clickButton').style.display = 'none';
+            } else {
+                const distances = [];
+                for (let i = 0; i <= 100; i++) {
+                    distances.push(`${Math.pow(2, i)} m`);
+                }
+                const randomDistance = distances[Math.floor(Math.random() * distances.length)];
+                document.getElementById('distance').style.display = 'block';
+                document.getElementById('distance').textContent = `距離：${randomDistance}`;
+            }
+        }
+    </script>
+</body>
+</html>
