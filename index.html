@@ -21,6 +21,14 @@
             font-size: 24px;
             margin-top: 10px;
         }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            margin: 0 10px;
+        }
     </style>
 </head>
 <body>
@@ -28,9 +36,15 @@
         <p>現在の数字：</p>
         <p id="number">1</p>
     </div>
-    <button onclick="clickNumber()" id="clickButton">クリック</button>
-    <button onclick="clearGame()" id="clearButton">終了</button>
-    <button onclick="multiplyBy1024()" id="multiplyButton">10クリック</button>
+    <div class="button-container">
+        <button onclick="clickNumber()" id="clickButton">クリック</button>
+        <button onclick="multiplyBy1024()" id="multiplyButton">10クリック</button>
+    </div>
+    
+    <div class="button-container">
+        <button onclick="clearGame()" id="clearButton">終了</button>
+    </div>
+    
     <div id="status"></div>
     <div id="distance"></div>
 
@@ -38,6 +52,7 @@
         let currentNumber = 1;
         let gameOver = false;
         let remainingClicks = 10;
+        let hasUsedMultiplyButton = false;
 
         function formatNumberWithCommas(number) {
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -52,7 +67,9 @@
                     document.getElementById('status').textContent = 'ゲームオーバー';
                     document.getElementById('clearButton').style.display = 'none';
                     document.getElementById('clickButton').style.display = 'none';
-                    document.getElementById('multiplyButton').style.display = 'none'; // ゲームオーバー時に非表示
+                    if (!hasUsedMultiplyButton) {
+                        document.getElementById('multiplyButton').style.display = 'none';
+                    }
                     document.getElementById('number').textContent = formatNumberWithCommas(currentNumber);
                 } else {
                     currentNumber *= 2;
@@ -66,7 +83,9 @@
                 document.getElementById('status').textContent = '成功！';
                 document.getElementById('clearButton').style.display = 'none';
                 document.getElementById('clickButton').style.display = 'none';
-                document.getElementById('multiplyButton').style.display = 'none'; // 成功時に非表示
+                if (!hasUsedMultiplyButton) {
+                    document.getElementById('multiplyButton').style.display = 'none';
+                }
             } else {
                 const distances = [];
                 for (let i = 0; i <= 100; i++) {
@@ -79,7 +98,7 @@
         }
 
         function multiplyBy1024() {
-            if (remainingClicks > 0) {
+            if (remainingClicks > 0 && !hasUsedMultiplyButton) {
                 const random = Math.random();
                 if (random < 0.8) {
                     gameOver = true;
@@ -87,14 +106,15 @@
                     document.getElementById('status').textContent = 'ゲームオーバー';
                     document.getElementById('clearButton').style.display = 'none';
                     document.getElementById('clickButton').style.display = 'none';
-                    document.getElementById('multiplyButton').style.display = 'none'; // ゲームオーバー時に非表示
+                    document.getElementById('multiplyButton').style.display = 'none';
                     document.getElementById('number').textContent = formatNumberWithCommas(currentNumber);
                 } else {
                     currentNumber *= 1024;
                     document.getElementById('number').textContent = formatNumberWithCommas(currentNumber);
                     remainingClicks--;
+                    hasUsedMultiplyButton = true;
                     if (remainingClicks <= 0) {
-                        document.getElementById('multiplyButton').style.display = 'none'; // クリック回数が0になったら非表示
+                        document.getElementById('multiplyButton').style.display = 'none';
                     }
                 }
             }
