@@ -37,19 +37,23 @@
         let currentNumber = 1;
         let gameOver = false;
 
+        function formatNumberWithCommas(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
         function clickNumber() {
             if (!gameOver) {
                 const random = Math.random();
                 if (random < 0.05) {
                     gameOver = true;
-                    currentNumber = 0; // ゲームオーバー時に0に設定
+                    currentNumber = 0;
                     document.getElementById('status').textContent = 'ゲームオーバー';
                     document.getElementById('clearButton').style.display = 'none';
                     document.getElementById('clickButton').style.display = 'none';
-                    document.getElementById('number').textContent = currentNumber; // 0を表示
+                    document.getElementById('number').textContent = formatNumberWithCommas(currentNumber);
                 } else {
                     currentNumber *= 2;
-                    document.getElementById('number').textContent = currentNumber;
+                    document.getElementById('number').textContent = formatNumberWithCommas(currentNumber);
                 }
             }
         }
@@ -62,7 +66,7 @@
             } else {
                 const distances = [];
                 for (let i = 0; i <= 100; i++) {
-                    distances.push(`${Math.pow(2, i)} m`);
+                    distances.push(`${formatNumberWithCommas(Math.pow(2, i))} m`);
                 }
                 const randomDistance = distances[Math.floor(Math.random() * distances.length)];
                 document.getElementById('distance').style.display = 'block';
